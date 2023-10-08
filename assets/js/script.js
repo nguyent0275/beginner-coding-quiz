@@ -1,12 +1,6 @@
 // timer function start
 var timerEl = document.getElementById("countdown");
-var questions = document.getElementById("questions")
-var choiceA = document.getElementById("a")
-var choiceB = document.getElementById("b")
-var choiceC = document.getElementById("c")
-var choiceD = document.getElementById("d")
 var startButton = document.getElementById("start-button")
-var state = 0
 
 function countdown() {
   var timeLeft = 100;
@@ -15,7 +9,7 @@ function countdown() {
     // "--" is ticking the timeLeft variable of 5 down by a second at a time
     timeLeft--;
     // displaying the timeLeft with, "seconds left in a textarea in the html's main
-    timerEl.textContent = timeLeft + " seconds left.";
+    timerEl.textContent = "Timer : " + timeLeft + " seconds left.";
     // if the timer hits 0 seconds, the timer will dissapear and run the displayMessage function.
     if (timeLeft === 0) {
       clearInterval(timeInterval);
@@ -24,103 +18,77 @@ function countdown() {
   }, 1000);
 }
 // timer function end
-function buttonStart(){
-    startButton.style.visibility = "hidden"
-    countdown();
-    questions.textContent = "1.Inside which HTML element do we put the JavaScript?"
-    choiceA.textContent = "<javascript>"
-    choiceB.textContent = "<js>"
-    choiceC.textContent = "<script>"
-    choiceD.textContent = "<scripting>"
-
-}
-
-function buttonPress(val) {
-    if (state == 0){
-        if (val == "<script>"){
-            state == 1
-        } else {
-            timerEl.textContent = parseInt(timerEl) - 10
-        }
-    }
-
-}
-let quizQuestions = [["1.Inside which HTML element do we put the JavaScript?","<javascript>", "<js>", "<script>", "<scripting>"]];
-
-myQuestionsString = JSON.stringify(quizQuestions)
-console.log(typeof(myQuestionsString))
-
-
-// questions.textContent = quizQuestions
-// console.log(typeof(quizQuestions))
-
-
-
-
-
-
-
-
-
+// nested objects myQuestions[{question,answers[
+  // {a,boolean},{b,boolean},{c,boolean},{d,boolean}]}]
 var myQuestions = [
   {
     question: "1.Inside which HTML element do we put the JavaScript?",
-    choices: {
-      a: "<javascript>",
-      b: "<js>",
-      c: "<script>",
-      d: "<scripting>",
-    },
-    answer: "c",
+    answers: [{ a: "<javascript>", b: "<js>", c: "<script>", d: "<scripting>"}],
   },
   {
     question: "2. Where is the correct place to insert a JavaScript?",
-    choices: {
-      a: "Both the <head> section and the <body> section are correct",
-      b: "The <body> section",
-      c: "The <head> section",
-      d: "The <footer> section",
-    },
-    answer: "a",
+    answers: [{ a: "Both the <head> section and the <body> section are correct", isCorrect: true},
+      {b: "The <body> section", isCorrect: false},
+      {c: "The <head> section", isCorrect: false},
+      {d: "The <footer> section", isCorrect: false},
+    ],
   },
   {
-    question: "3. An external JavaScript must contain the <script> tag",
-    choices: {
-      a: "true",
-      b: "false",
-    },
-    answer: "a",
+    question: "3. How do you create a function?",
+    answers: [{ a: "function:myFunction()", isCorrect: false},
+      {b: "function=myFunction()", isCorrect: false},
+      {c: "function myFunction()", isCorrect: true},
+      {d: "myFunction():function", isCorrect: false},
+    ],
   },
   {
-    question: "4. How do you create a function?",
-    choices: {
-      a: "function:myFunction()",
-      b: "function=myFunction()",
-      c: "function myFunction()",
-      d: "myFunction():function",
-    },
-    answer: "c",
+    question: "4. How do you call a function named 'myFunction'?",
+    answers: [{ a: "call myFunction()", isCorrect: false},
+      {b: "myFunction()", isCorrect: true},
+      {c: "call function myFunction", isCorrect: false},
+      {d: "Call.myFunction()", isCorrect: false},
+    ],
   },
   {
-    question: "5. How do you call a function named 'myFunction'?",
-    choices: {
-      a: "call myFunction()",
-      b: "myFunction()",
-      c: "call function myFunction",
-      d: "Call.myFunction()",
-    },
-    answer: "b",
-  },
-  {
-    question: "6. How does a 'for' loop start?",
-    choices: {
-      a: "for (i = 0; i <= 5)",
-      b: "for (i = 0; i <= 5; i++)",
-      c: "for i = 1 to 5",
-      d: "for (i <= 5; i++)",
-    },
-    answer: "b",
+    question: "5. How does a 'for' loop start??",
+    answers: [{ a: "for (i = 0; i <= 5)", isCorrect: false},
+      {b: "for (i = 0; i <= 5; i++)", isCorrect: true},
+      {c: "for i = 1 to 5", isCorrect: false},
+      {d: "for (i <= 5; i++)", isCorrect: false},
+    ],
   },
 ];
+var state = 0
+var score = 0
 
+function buttonStart(){
+  startButton.style.visibility = "hidden"
+  countdown()
+  loadQuestion()
+}
+
+
+function loadQuestion() {
+  var questions = document.getElementById("questions")
+  var choices = document.getElementById("choices")
+
+  questions.textContent = myQuestions[state].question;
+  choices.innerHTML = ""
+
+  for (let i = 0; i < myQuestions[state].answers.length; i++) {
+    const choicesdiv = document.createElement("div");
+    const choice = document.createElement("input");
+    const choiceLabel = document.createElement("label");
+
+    choice.type = "radio";
+    choice.name = "answer";
+    choice.value = i;
+
+    choiceLabel.textContent = myQuestions[state].answers[i].text;
+    
+    choicesdiv.appendChild(choice);
+    choicesdiv.appendChild(choiceLabel);
+    choices.appendChild(choicesdiv);
+  }
+}
 // questions.textContent = myQuestionsString
