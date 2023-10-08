@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link  rel="stylesheet" text= text/css href="./assets/css/style.css">
+    <title>Beginner Coding Quiz</title>
+</head>
+<body>
+    <header id="countdown">Time</header>
+    <div id="quiz">
+        <button onclick="buttonStart()" id="start-button"></button>
+        <h2 id="questions"></h2>
+        <div>
+            <button onclick="buttonPress(this.textContent)" class="multiple-choice" id="a"></button>
+            <button onclick="buttonPress(this.textContent)" class="multiple-choice" id="b"></button>
+            <button onclick="buttonPress(this.textContent)" class="multiple-choice" id="c"></button>
+            <button onclick="buttonPress(this.textContent)" class="multiple-choice" id="d"></button>
+        </div>
+    </div>
+
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
