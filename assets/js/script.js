@@ -2,16 +2,21 @@
 var timerEl = document.getElementById("countdown");
 var startButton = document.getElementById("start-button");
 var submitButton = document.getElementById("submit-button");
-var timeLeft = 100;
+var timeLeft = 20;
+var state = 0;
+var score = 0;
 
 function countdown() {
   var timeInterval = setInterval(function () {
     // "--" is ticking the timeLeft variable of 5 down by a second at a time
     timeLeft--;
     // displaying the timeLeft with, "seconds left in a textarea in the html's main
-    timerEl.textContent = "Timer : " + timeLeft + " seconds left.";
+    timerEl.textContent = "Time : " + timeLeft;
     // if the timer hits 0 seconds, the timer will dissapear and run the displayMessage function.
-    if (timeLeft === 0) {
+    if (timeLeft == 0) {
+      let score = state / (myQuestions.length) * 100
+      alert("You scored a " + score)
+      saveScore()
       clearInterval(timeInterval);
     }
     //how often the setInterval function is being called, which is 1000ms or 1s (the rate the timer goes down)
@@ -20,6 +25,13 @@ function countdown() {
 // timer function end
 // nested objects myQuestions[{question,answers[
 // {a,boolean},{b,boolean},{c,boolean},{d,boolean}]}]
+
+function buttonStart() {
+  startButton.style.visibility = "hidden";
+  countdown();
+  loadQuestion();
+}
+
 var myQuestions = [
   {
     question: "1.Inside which HTML element do we put the JavaScript?",
@@ -45,39 +57,32 @@ var myQuestions = [
   {
     question: "3. How do you create a function?",
     answers: [
-      { a: "function:myFunction()", isCorrect: false },
-      { b: "function=myFunction()", isCorrect: false },
-      { c: "function myFunction()", isCorrect: true },
-      { d: "myFunction():function", isCorrect: false },
+      { ans: "function:myFunction()", isCorrect: false},
+      { ans: "function=myFunction()", isCorrect: false },
+      { ans: "function myFunction()", isCorrect: true },
+      { ans: "myFunction():function", isCorrect: false },
     ],
   },
   {
     question: "4. How do you call a function named 'myFunction'?",
     answers: [
-      { a: "call myFunction()", isCorrect: false },
-      { b: "myFunction()", isCorrect: true },
-      { c: "call function myFunction", isCorrect: false },
-      { d: "Call.myFunction()", isCorrect: false },
+      { ans: "call myFunction()", isCorrect: false},
+      { ans: "myFunction()", isCorrect: true},
+      { ans: "call function myFunction", isCorrect: false },
+      { ans: "Call.myFunction()", isCorrect: false },
     ],
   },
   {
-    question: "5. How does a 'for' loop start??",
+    question: "5. How does a 'for' loop start?",
     answers: [
-      { a: "for (i = 0; i <= 5)", isCorrect: false },
-      { b: "for (i = 0; i <= 5; i++)", isCorrect: true },
-      { c: "for i = 1 to 5", isCorrect: false },
-      { d: "for (i <= 5; i++)", isCorrect: false },
+      { ans: "for (i = 0; i <= 5)", isCorrect: false},
+      { ans: "for (i = 0; i <= 5; i++)", isCorrect: true},
+      { ans: "for i = 1 to 5", isCorrect: false},
+      { ans: "for (i <= 5; i++)", isCorrect: false },
     ],
   },
 ];
-var state = 0;
-var score = 0;
 
-function buttonStart() {
-  startButton.style.visibility = "hidden";
-  countdown();
-  loadQuestion();
-}
 
 function loadQuestion() {
   var questions = document.getElementById("questions");
@@ -132,11 +137,23 @@ function submitAnswer() {
   console.log(isCorrect);
   if (isCorrect) {
     state++;
+  if (state !== (myQuestions.length))
     loadQuestion();
   } else timeLeft -= 10;
   timerEl.textContent = "Timer : " + timeLeft + " seconds left.";
+
+  if (state == (myQuestions.length)){
+    let score = state / (myQuestions.length) * 100
+    alert("You scored a " + score)
+  }
+  saveScore()
 }
-// if (getElementById()) {
-// }
-// }
-// questions.textContent = myQuestionsString
+
+function saveScore () {
+  let savedName = document.createElement("input")
+  let savedScore = document.createElement("h1")
+
+  savedScore = "Congratulations your score is " + score
+  savedName = "Enter your name here: "
+  
+  }
