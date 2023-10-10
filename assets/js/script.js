@@ -1,37 +1,48 @@
-// timer function start
+// timer location in html 
 var timerEl = document.getElementById("countdown");
+// start button location in html
 var startButton = document.getElementById("start-button");
+// suntmit button location in html
 var submitButton = document.getElementById("submit-button");
 var timeLeft = 20;
+// index for which question is being displayed
 var state = 0;
+// the value of the user's number of correct answers divided by the total amount of questions
 var score = 0;
 
+// timer function start
 function countdown() {
   var timeInterval = setInterval(function () {
-    // "--" is ticking the timeLeft variable of 5 down by a second at a time
+    // "--" is ticking the value of timeLeft down by one (unit is being established at the end of the function js.line28)
     timeLeft--;
-    // displaying the timeLeft with, "seconds left in a textarea in the html's main
+    // displaying the timeLeft with, "Time:" prefacing it in a textarea in the html's main
     timerEl.textContent = "Time : " + timeLeft;
-    // if the timer hits 0 seconds, the timer will dissapear and run the displayMessage function.
+    // if the timer hits 0 seconds, the timer will dissapear and calculate score
     if (timeLeft == 0) {
       let score = state / (myQuestions.length) * 100
+      // displaying the score as an alert
       alert("You scored a " + score)
       saveScore()
+      // cancels the timer
       clearInterval(timeInterval);
     }
-    //how often the setInterval function is being called, which is 1000ms or 1s (the rate the timer goes down)
+    //how often the setInterval function is being called, which is 1000ms or 1 second (the rate the timer goes down)
   }, 1000);
 }
 // timer function end
-// nested objects myQuestions[{question,answers[
-// {a,boolean},{b,boolean},{c,boolean},{d,boolean}]}]
 
+
+// start button function
 function buttonStart() {
+  // hides start button on click
   startButton.style.visibility = "hidden";
+  // runs countdown and loadquestion functions
   countdown();
   loadQuestion();
 }
+// start button function end
 
+// nested objects myQuestions[{question,answers[{a,boolean},{b,boolean},{c,boolean},{d,boolean}]}]
 var myQuestions = [
   {
     question: "1.Inside which HTML element do we put the JavaScript?",
@@ -83,15 +94,18 @@ var myQuestions = [
   },
 ];
 
-
+// load questions function start
 function loadQuestion() {
+  // where the questions and choices are being displayed in html
   var questions = document.getElementById("questions");
   var choices = document.getElementById("choices");
-
+  // how the questions are being displayed in html 
   questions.textContent = myQuestions[state].question;
-  choices.innerHTML = "";
-  console.log(myQuestions[state]);
+  // setting the text of choices in html to blank / 
+  choices.textContent = "";
+  // looping through the objects in the answers array 
   for (let i = 0; i < myQuestions[state].answers.length; i++) {
+    // creating a div, input, and label within html
     const choicesdiv = document.createElement("div");
     const choice = document.createElement("input");
     const choiceLabel = document.createElement("label");
@@ -113,11 +127,14 @@ function loadQuestion() {
       default:
         break;
     }
+    // answers being displayed correlate to the question state
     answers += myQuestions[state].answers[i].ans;
+    // sets the choices to a type of radio inpt
     choice.type = "radio";
+    // 
     choice.name = "answer";
     choice.value = i;
-
+    // displaying the answers in html
     choiceLabel.textContent = answers;
 
     choicesdiv.appendChild(choice);
@@ -125,30 +142,42 @@ function loadQuestion() {
     choices.appendChild(choicesdiv);
   }
 }
+// load question function end
 
+// adds functionality to submit button / on click will run the submitAnswer function
 submitButton.addEventListener("click", submitAnswer, false);
 
+// submit answer function start
 function submitAnswer() {
+  // checks the value of the user input in html
   let checkedValue = document.querySelector(
     'input[name="answer"]:checked'
   ).value;
+  // sets a variable to easily access the boolean key value pairs associated with the choices 
   var isCorrect = myQuestions[state].answers[checkedValue].isCorrect;
-  console.log(checkedValue);
-  console.log(isCorrect);
+  // checking if user input's choice has the corresponding key value pair of isCorrect
   if (isCorrect) {
+    // if they do, then state increases and next question is loaded
     state++;
+    // if the state of the question increases past the length(amount) of the myQuestions array
   if (state !== (myQuestions.length))
     loadQuestion();
+  // if they answer wrong, the timeLeft is decreased by 10seconds 
   } else timeLeft -= 10;
-  timerEl.textContent = "Timer : " + timeLeft + " seconds left.";
+  timerEl.textContent = "Timer : " + timeLeft;
 
+  // if the state reaches the end of the array
   if (state == (myQuestions.length)){
+    // score will be calculated based on the current state divided by total questions. (multplied by 100 to display as percentage)
     let score = state / (myQuestions.length) * 100
+    // displays the score as an alert box
     alert("You scored a " + score)
   }
+  // save score function will run 
   saveScore()
 }
 
+// save score function start
 function saveScore () {
   let savedName = document.createElement("input")
   let savedScore = document.createElement("h1")
