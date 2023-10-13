@@ -5,12 +5,21 @@ var startButton = document.getElementById("start-button");
 // submit button location in html
 var submitButton = document.getElementById("submit-button");
 // time left in the timer
-var timeLeft = 20;
+var timeLeft = 2;
 // index for which question is being displayed
 var state = 0;
 // the value of the user's number of correct answers divided by the total amount of questions
 var score = 0;
 submitButton.style.visibility = "hidden";
+var savedInitial = document.createElement("h2")
+var savedScore = document.createElement("h3")
+var quizIntro = document.getElementById("quiz");
+var quizP = document.getElementById("quiz-p");
+var questions = document.getElementById("questions");
+var choices = document.getElementById("choices");
+var initials = document.querySelectorAll("#initials")
+
+initials.setAttributes = "style", "visibility: hidden"
 
 // timer function start
 function countdown() {
@@ -18,16 +27,17 @@ function countdown() {
     // "--" is ticking the value of timeLeft down by one (unit is being established at the end of the function js.line28)
     timeLeft--;
     // displaying the timeLeft with, "Time:" prefacing it in a textarea in the html's main
-    timerEl.textContent = "Time : " + timeLeft;
+    timerEl.textContent = "Time: " + timeLeft;
     // if the timer hits 0 seconds, the timer will dissapear and calculate score
+    if (state == myQuestions.length) {
+      clearInterval(timeInterval)
+      removeQuestions()
+    }
     if (timeLeft <= 0) {
-      let score = (state / myQuestions.length) * 100;
-      // displaying the score as an alert
-      // document.body.innerHTML = "";
-      alert("You scored a " + score);
-      saveScore();
-      // cancels the timer
+      timerEl.textContent = "Time: "
       clearInterval(timeInterval);
+      removeQuestions()
+      // cancels the timer
     }
     //how often the setInterval function is being called, which is 1000ms or 1 second (the rate the timer goes down)
   }, 1000);
@@ -35,8 +45,8 @@ function countdown() {
 // timer function end
 
 // variables that store the text for the quiz introductions
-var quizIntro = document.getElementById("quiz");
-var quizP = document.getElementById("quiz-p");
+// var quizIntro = document.getElementById("quiz");
+// var quizP = document.getElementById("quiz-p");
 quizIntro.textContent = "Coding Quiz Challenge";
 quizP.textContent =
   "Try to answer the following javascript-related questions within the time limit. Keep in mind that incorrect answers will penalize your time by 10 seconds";
@@ -51,8 +61,8 @@ function buttonStart() {
   // shows submit button on click
   submitButton.style.visibility = "visible";
   // removes the text from the quiz introductions
-  quizIntro.remove();
-  quizP.remove();
+  quizIntro.textContent = ""
+  quizP.textContent = ""
 }
 // start button function end
 
@@ -110,9 +120,6 @@ var myQuestions = [
 
 // load questions function start
 function loadQuestion() {
-  // where the questions and choices are being displayed in html
-  var questions = document.getElementById("questions");
-  var choices = document.getElementById("choices");
   // how the questions are being displayed in html
   questions.textContent = myQuestions[state].question;
   // setting the text of choices in html to blank /
@@ -154,6 +161,7 @@ function loadQuestion() {
     choicesdiv.appendChild(choice);
     choicesdiv.appendChild(choiceLabel);
     choices.appendChild(choicesdiv);
+
   }
 }
 // load question function end
@@ -182,23 +190,21 @@ function submitAnswer() {
   // if the state reaches the end of the array
   if (state == myQuestions.length) {
     // score will be calculated based on the current state divided by total questions. (multplied by 100 to display as percentage)
-    let score = (state / myQuestions.length) * 100;
-    // displays the score as an alert box
-    // document.body.innerHTML = "";
-    alert("You scored a " + score);
-    saveScore()
+    console.log(state)
+    removeQuestions()
+    return
   }
   // save score function will run
   // saveScore()
 }
-
-// save score function start
-function saveScore() {
-  var savedInitial = document.createElement("h2")
-  var savedScore = document.createElement("h3")
-  body.appendChild(savedInitial)
-  body.appendChild(savedScore)
-
-  savedInitial.textContent = "Please save your initials here: "
-  savedScore.textContent = "Your new high score is: " + score
+function removeQuestions() {
+  timerEl.textContent = "Timer: " + timeLeft
+  let score = (state / myQuestions.length) * 100;
+  localStorage.setItem("score", score)
+  questions.textContent = ""
+  choices.textContent = ""
+  quizIntro.textContent = "All Done"
+  quizP.textContent = "Your final score is " + score
+  initials.style.visibility = "visible"
+  submitButton.style.visibility = "hidden"
 }
