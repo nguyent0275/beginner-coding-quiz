@@ -17,9 +17,6 @@ var quizIntro = document.getElementById("quiz");
 var quizP = document.getElementById("quiz-p");
 var questions = document.getElementById("questions");
 var choices = document.getElementById("choices");
-var initials = document.querySelectorAll("#initials")
-
-initials.setAttributes = "style", "visibility: hidden"
 
 // timer function start
 function countdown() {
@@ -198,6 +195,7 @@ function submitAnswer() {
   // saveScore()
 }
 function removeQuestions() {
+  submitButton.style.visibility = "hidden"
   timerEl.textContent = "Timer: " + timeLeft
   let score = (state / myQuestions.length) * 100;
   localStorage.setItem("score", score)
@@ -205,6 +203,8 @@ function removeQuestions() {
   choices.textContent = ""
   quizIntro.textContent = "All Done"
   quizP.textContent = "Your final score is " + score
-  initials.style.visibility = "visible"
-  submitButton.style.visibility = "hidden"
+  document.createElement("input")
+  var initials = document.querySelector("input")
+  initials.textContent = "Please input your initials here"
+  quizP.append(input)
 }
