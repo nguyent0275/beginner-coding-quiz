@@ -21,6 +21,7 @@ var initials = document.querySelectorAll("#initials")
 
 initials.setAttributes = "style", "visibility: hidden"
 
+
 // timer function start
 function countdown() {
   var timeInterval = setInterval(function () {
@@ -36,7 +37,9 @@ function countdown() {
     if (timeLeft <= 0) {
       timerEl.textContent = "Time: "
       clearInterval(timeInterval);
+      // saveScore()
       removeQuestions()
+      saveScore()
       // cancels the timer
     }
     //how often the setInterval function is being called, which is 1000ms or 1 second (the rate the timer goes down)
@@ -198,6 +201,7 @@ function submitAnswer() {
   // saveScore()
 }
 function removeQuestions() {
+  submitButton.style.visibility = "hidden"
   timerEl.textContent = "Timer: " + timeLeft
   let score = (state / myQuestions.length) * 100;
   localStorage.setItem("score", score)
@@ -206,5 +210,10 @@ function removeQuestions() {
   quizIntro.textContent = "All Done"
   quizP.textContent = "Your final score is " + score
   initials.style.visibility = "visible"
-  submitButton.style.visibility = "hidden"
+}
+
+function saveScore() {
+  const initialsInput = document.createElement("p")
+  initialsInput.textContent = "Please input your initials"
+  document.body.appendChild(initialsInput) 
 }
