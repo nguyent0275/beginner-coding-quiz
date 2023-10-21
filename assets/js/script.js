@@ -4,22 +4,20 @@ var timerEl = document.getElementById("countdown");
 var startButton = document.getElementById("start-button");
 // submit button location in html
 var submitButton = document.getElementById("submit-button");
+submitButton.style.visibility = "hidden";
 // time left in the timer
 var timeLeft = 2;
 // index for which question is being displayed
 var state = 0;
 // the value of the user's number of correct answers divided by the total amount of questions
 var score = 0;
-submitButton.style.visibility = "hidden";
+var divContainer = document.getElementById("user-name")
 var savedInitial = document.createElement("h2")
 var savedScore = document.createElement("h3")
 var quizIntro = document.getElementById("quiz");
 var quizP = document.getElementById("quiz-p");
 var questions = document.getElementById("questions");
 var choices = document.getElementById("choices");
-var initials = document.querySelectorAll("#initials")
-
-initials.setAttributes = "style", "visibility: hidden"
 
 
 // timer function start
@@ -209,11 +207,25 @@ function removeQuestions() {
   choices.textContent = ""
   quizIntro.textContent = "All Done"
   quizP.textContent = "Your final score is " + score
-  initials.style.visibility = "visible"
 }
 
 function saveScore() {
-  const initialsInput = document.createElement("p")
-  initialsInput.textContent = "Please input your initials"
-  document.body.appendChild(initialsInput) 
+  const initialsInput = document.createElement("input")
+  const initialsSubmit = document.createElement("button")
+  initialsInput.setAttribute("id", "initials")
+  let initialsVal = document.getElementById("initials")
+  initialsInput.placeholder = "Please input your Initials"
+  initialsInput.type = "text"
+  divContainer.appendChild(initialsInput)
+  divContainer.appendChild(initialsSubmit)
+  initialsSubmit.textContent = "Submit"
+  console.log(initialsInput.value)
+  console.log(score)
+  initialsSubmit.addEventListener("click", storeScore())
+
+  function storeScore(){
+    localStorage.setItem(String(initialsVal))
+    localStorage.setItem(String(score))
+  }
+
 }
