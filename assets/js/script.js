@@ -6,7 +6,7 @@ var startButton = document.getElementById("start-button");
 var answerSubmitButton = document.getElementById("submit-button");
 answerSubmitButton.style.visibility = "hidden";
 // time left in the timer
-var timeLeft = 2;
+var timeLeft = 30;
 // index for which question is being displayed
 var state = 0;
 // the value of the user's number of correct answers divided by the total amount of questions
