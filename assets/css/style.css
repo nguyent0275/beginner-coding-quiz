@@ -1,3 +1,19 @@
-#reset {
-    display: block;
+.multiple-choice {
+  border: 1px solid blue;
+  background-color: cyan;
+}
+
+#choices {
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+#countdown {
+  text-align: center;
+  font-size: 150%;
+}
+
+#form {
+  text-align: center;
+  font-size: 150%;
 }
