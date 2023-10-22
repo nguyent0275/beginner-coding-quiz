@@ -3,56 +3,52 @@ var timerEl = document.getElementById("countdown");
 // start button location in html
 var startButton = document.getElementById("start-button");
 // submit button location in html
-var submitButton = document.getElementById("submit-button");
-submitButton.style.visibility = "hidden";
+var answerSubmitButton = document.getElementById("submit-button");
+answerSubmitButton.style.visibility = "hidden";
 // time left in the timer
-var timeLeft = 2;
+var timeLeft = 60;
 // index for which question is being displayed
 var state = 0;
 // the value of the user's number of correct answers divided by the total amount of questions
 var score = 0;
-var divContainer = document.getElementById("user-name")
-var savedInitial = document.createElement("h2")
-var savedScore = document.createElement("h3")
+// div that wraps the quiz content / used later to append button and input (js line 215/216)
+var divContainer = document.getElementById("container");
+// div that contains text content for title and final report
 var quizIntro = document.getElementById("quiz");
+// <p> that contains the quiz introduction and final score and high score
 var quizP = document.getElementById("quiz-p");
+// <h1> that contains the quiz questions
 var questions = document.getElementById("questions");
+// <div> that contains the quiz question's choices
 var choices = document.getElementById("choices");
 
-
-// timer function start
+// timer function
 function countdown() {
+  // adds functionality to submit button js (line 172) / on click will run the submitAnswer function
+  answerSubmitButton.addEventListener("click", () => submitAnswer(timeInterval), false);
   var timeInterval = setInterval(function () {
     // "--" is ticking the value of timeLeft down by one (unit is being established at the end of the function js.line28)
     timeLeft--;
     // displaying the timeLeft with, "Time:" prefacing it in a textarea in the html's main
     timerEl.textContent = "Time: " + timeLeft;
     // if the timer hits 0 seconds, the timer will dissapear and calculate score
-    if (state == myQuestions.length) {
-      clearInterval(timeInterval)
-      removeQuestions()
-    }
     if (timeLeft <= 0) {
-      timerEl.textContent = "Time: "
-      clearInterval(timeInterval);
-      // saveScore()
-      removeQuestions()
-      saveScore()
+      timerEl.textContent = "Time: ";
       // cancels the timer
+      clearInterval(timeInterval);
+      removeQuestions();
+      scoreCalculator()
+      saveScore();
     }
     //how often the setInterval function is being called, which is 1000ms or 1 second (the rate the timer goes down)
   }, 1000);
 }
-// timer function end
-
-// variables that store the text for the quiz introductions
-// var quizIntro = document.getElementById("quiz");
-// var quizP = document.getElementById("quiz-p");
+// initial text on page start up / quiz introductions
 quizIntro.textContent = "Coding Quiz Challenge";
 quizP.textContent =
   "Try to answer the following javascript-related questions within the time limit. Keep in mind that incorrect answers will penalize your time by 10 seconds";
 
-// start button function
+// starts the quiz
 function buttonStart() {
   // hides start button on click
   startButton.style.visibility = "hidden";
@@ -60,12 +56,11 @@ function buttonStart() {
   countdown();
   loadQuestion();
   // shows submit button on click
-  submitButton.style.visibility = "visible";
+  answerSubmitButton.style.visibility = "visible";
   // removes the text from the quiz introductions
-  quizIntro.textContent = ""
-  quizP.textContent = ""
+  quizIntro.textContent = "";
+  quizP.textContent = "";
 }
-// start button function end
 
 // nested objects myQuestions[{question,answers[{a,boolean},{b,boolean},{c,boolean},{d,boolean}]}]
 var myQuestions = [
@@ -119,7 +114,7 @@ var myQuestions = [
   },
 ];
 
-// load questions function start
+// runs on start button / loads the questions and choices
 function loadQuestion() {
   // how the questions are being displayed in html
   questions.textContent = myQuestions[state].question;
@@ -153,25 +148,22 @@ function loadQuestion() {
     answers += myQuestions[state].answers[i].ans;
     // sets the choices to a type of radio inpt
     choice.type = "radio";
-    //
+    // sets the letters to the choices
     choice.name = "answer";
+    // appending the corresponding letter to the right choice
     choice.value = i;
-    // displaying the answers in html
+    // setting the text content to the choices currently being displayed based on the current question 
     choiceLabel.textContent = answers;
-
+    // appending the radio button to the div container for choices
     choicesdiv.appendChild(choice);
+    // appending the answer/choices to the div container
     choicesdiv.appendChild(choiceLabel);
+    // appending the container for the radio buttons and questions to outer div
     choices.appendChild(choicesdiv);
-
   }
 }
-// load question function end
 
-// adds functionality to submit button / on click will run the submitAnswer function
-submitButton.addEventListener("click", submitAnswer, false);
-
-// submit answer function start
-function submitAnswer() {
+function submitAnswer(timeInterval) {
   // checks the value of the user input in html
   let checkedValue = document.querySelector(
     'input[name="answer"]:checked'
@@ -191,41 +183,73 @@ function submitAnswer() {
   // if the state reaches the end of the array
   if (state == myQuestions.length) {
     // score will be calculated based on the current state divided by total questions. (multplied by 100 to display as percentage)
-    console.log(state)
-    removeQuestions()
-    return
+    clearInterval(timeInterval)
+    removeQuestions();
+    scoreCalculator()
+    saveScore();
+    return;
   }
-  // save score function will run
-  // saveScore()
 }
+
+// function will clear the questions and multiple choices / hide the answer submit button
 function removeQuestions() {
-  submitButton.style.visibility = "hidden"
-  timerEl.textContent = "Timer: " + timeLeft
-  let score = (state / myQuestions.length) * 100;
-  localStorage.setItem("score", score)
-  questions.textContent = ""
-  choices.textContent = ""
-  quizIntro.textContent = "All Done"
-  quizP.textContent = "Your final score is " + score
+  answerSubmitButton.style.visibility = "hidden";
+  timerEl.textContent = "Timer: " + timeLeft;
+  questions.textContent = "";
+  choices.textContent = "";
+  quizIntro.textContent = "All Done";
 }
 
+// function will calculate score based on current state divided by max questions and multipled by 100 for percentage
+function scoreCalculator(){
+  score = (state / myQuestions.length) * 100;
+  // will display score on html with string
+  quizP.textContent = "Your final score is " + score;
+}
+
+// function will create input fields for saving intials and high score
 function saveScore() {
-  const initialsInput = document.createElement("input")
-  const initialsSubmit = document.createElement("button")
-  initialsInput.setAttribute("id", "initials")
-  let initialsVal = document.getElementById("initials")
-  initialsInput.placeholder = "Please input your Initials"
-  initialsInput.type = "text"
-  divContainer.appendChild(initialsInput)
-  divContainer.appendChild(initialsSubmit)
-  initialsSubmit.textContent = "Submit"
-  console.log(initialsInput.value)
-  console.log(score)
-  initialsSubmit.addEventListener("click", storeScore())
+  const initialsInput = document.createElement("input");
+  const initialsSubmit = document.createElement("button");
+  initialsInput.setAttribute("id", "initials");
+  initialsInput.placeholder = "Please input your Initials";
+  initialsInput.type = "text";
+  divContainer.appendChild(initialsInput);
+  divContainer.appendChild(initialsSubmit);
+  initialsSubmit.textContent = "Submit";
+  // submit button for intials will run the function to store score and intials to local storage / passes the variables (initialsInput, initialsSubmit) from function to allow storeScore to be used in global scope
+  initialsSubmit.addEventListener(
+    "click",
+    () => storeScore(initialsInput, initialsSubmit),
+    false
+  );
+}
 
-  function storeScore(){
-    localStorage.setItem(String(initialsVal))
-    localStorage.setItem(String(score))
-  }
+// sets and gets the intials and score / displays it with a string 
+function storeScore(initialsInput, initialsSubmit) {
+  // getting the value of the user input
+  let initialsVal = document.getElementById("initials").value;
+  localStorage.setItem("initials", String(initialsVal));
+  localStorage.setItem("score", String(score));
+  // hiding the input and submit button on click
+  initialsInput.style.visibility = "hidden";
+  initialsSubmit.style.visibility = "hidden";
+  // storing the local storage values as variables
+  let initials = localStorage.getItem("initials");
+  let highScore = parseInt(localStorage.getItem("score"));
+  // how the values are being displayed to html 
+  quizIntro.textContent = "High Scores";
+  quizP.textContent = "1." + initials + "-" + highScore;
+  // creates a button/ functionality is to reset page to retake quiz
+  const goBack = document.createElement("button");
+  // set a class for css value of display block
+  goBack.setAttribute("id", "reset");
+  quizP.appendChild(goBack);
+  goBack.textContent = "Go Back";
+  goBack.addEventListener("click", pageReset, false);
+}
 
+// function for resetting page
+function pageReset() {
+  document.location.reload();
 }
