@@ -6,7 +6,6 @@
 - Image
 - Features
 - Usage
-- Contributions
 
 ## Description
 This project is a beginner level coding quiz that focuses on Javascript basics. 
@@ -15,15 +14,17 @@ This project is a beginner level coding quiz that focuses on Javascript basics.
 https://nguyent0275.github.io/beginner-coding-quiz/
 
 ## Image
-![Alt text](/Develop/assets/images/Horiseon-Wesbite.png.jpg)
+![Alt text](/assets/images/NVIDIA_Share_2023-10-21_23-53-56.png)
 
 ## Features
-- Semantic HTML: Replaced < div > elements with semantic elements such as, < section > and < article >
-- Optimized CSS: CSS stylesheet has been streamlined to cut back on redundant class selectors
-- Alt Attributes: Added descriptive "alt" to all images
-- Code Comments: Commented out redundant code and added comments to explain the changes and purpose of newly added code
+- Intergrated Timer: Built in timer that records the length of quiz completion and closes quiz out on timeout
+- Dynamic Javascript: Responsive page built with Javascript without the use of a hard coded HTML.  
+- Realtime Score Calculator: Get your grade back instantly upon quiz completion.
+- Score Tracker: Will log and display previously recorded score. 
+- Code Comments: In depth code comments that explain the functionality and uses of Javascript
 
 ## Usage
-1. Open the 'index.html' file in your web browser to view the Horiseon website.
-2. You can access the CSS file in the 'assets/css/style.css' for reference. 
-3. To make any changes, open the respective files in your code editor. 
+1. Open the 'index.html' file in your web browser to view the Coding Quiz. 
+2. Click the "Start Button", to begin the quiz.
+3. Answer question within the time limit to recieve a score upon completion.
+4. Input your intials at the end to save your score. 
